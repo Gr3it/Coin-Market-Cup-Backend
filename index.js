@@ -6,7 +6,7 @@ const app = express();
 const limit = 1000;
 const currency = "EUR";
 
-app.get("/", (req, res) => {
+app.get("/listings/latest", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   axios
     .get(
@@ -21,7 +21,26 @@ app.get("/", (req, res) => {
       res.send(response.data);
     })
     .catch((error) => {
-      res.send(response);
+      res.send(error);
+    });
+});
+
+app.get("/info/:id", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  axios
+    .get(
+      `https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?id=${req.params.id}`,
+      {
+        headers: {
+          "X-CMC_PRO_API_KEY": process.env.COINMARKETCAP_KEY,
+        },
+      }
+    )
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      res.send(error);
     });
 });
 
