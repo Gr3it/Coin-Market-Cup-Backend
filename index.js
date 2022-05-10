@@ -6,11 +6,14 @@ const app = express();
 const limit = 1000;
 const currency = "EUR";
 
+let data; //Only development (remove api spam) remove in production
+
 app.get("/listings/latest", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  if (data) res.send(data); //Only development (remove api spam) remove in production
   axios
     .get(
-      `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${limit}&convert=${currency}&aux=platform`,
+      `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${limit}&convert=${currency}`,
       {
         headers: {
           "X-CMC_PRO_API_KEY": process.env.COINMARKETCAP_KEY,
@@ -18,6 +21,7 @@ app.get("/listings/latest", (req, res) => {
       }
     )
     .then((response) => {
+      data = response.data;
       res.send(response.data);
     })
     .catch((error) => {
