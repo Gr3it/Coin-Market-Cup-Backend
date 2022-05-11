@@ -34,11 +34,11 @@ app.get("/listings/latest", (req, res) => {
 });
 
 app.get("/info/:id", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   if (coinInfo[req.params.id]) {
     res.send(coinInfo[req.params.id]); //Only development (remove api spam) remove in production
     return;
   }
-  res.setHeader("Access-Control-Allow-Origin", "*");
   axios
     .get(
       `https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?id=${req.params.id}`,
