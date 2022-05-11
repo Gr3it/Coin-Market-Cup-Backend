@@ -6,11 +6,15 @@ const app = express();
 const limit = 1000;
 const currency = "EUR";
 
-let data; //Only development (remove api spam) remove in production
+let listingData; //Only development (remove api spam) remove in production
+let coinInfo = [];
 
 app.get("/listings/latest", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  if (data) res.send(data); //Only development (remove api spam) remove in production
+  if (listingData) {
+    res.send(listingData); //Only development (remove api spam) remove in production
+    return;
+  }
   axios
     .get(
       `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${limit}&convert=${currency}`,
@@ -21,7 +25,7 @@ app.get("/listings/latest", (req, res) => {
       }
     )
     .then((response) => {
-      data = response.data;
+      listingData = response.data;
       res.send(response.data);
     })
     .catch((error) => {
@@ -30,6 +34,10 @@ app.get("/listings/latest", (req, res) => {
 });
 
 app.get("/info/:id", (req, res) => {
+  if (coinInfo[req.params.id]) {
+    res.send(coinInfo[req.params.id]); //Only development (remove api spam) remove in production
+    return;
+  }
   res.setHeader("Access-Control-Allow-Origin", "*");
   axios
     .get(
@@ -41,6 +49,7 @@ app.get("/info/:id", (req, res) => {
       }
     )
     .then((response) => {
+      coinInfo[req.params.id] = response.data;
       res.send(response.data);
     })
     .catch((error) => {
