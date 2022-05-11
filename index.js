@@ -7,7 +7,7 @@ const limit = 1000;
 const currency = "EUR";
 
 let listingData; //Only development (remove api spam) remove in production
-let coinInfo = [];
+let coinInfo = []; //Only development (remove api spam) remove in production
 
 app.get("/listings/latest", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
